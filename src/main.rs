@@ -1,8 +1,7 @@
-mod color;
-mod vec3;
+use std::io::{self, Write};
 
-use std::io::{self, Write};                
-use vec3::Vec3;
+use raytracer::color;
+use raytracer::vec3::Vec3;
 
 fn main() {
     const IMAGE_WIDTH: i32 = 256;
