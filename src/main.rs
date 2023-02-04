@@ -1,4 +1,8 @@
-use std::io::{self, Write};                 
+mod color;
+mod vec3;
+
+use std::io::{self, Write};                
+use vec3::Vec3;
 
 fn main() {
     const IMAGE_WIDTH: i32 = 256;
@@ -8,17 +12,12 @@ fn main() {
 
     for j in (0..IMAGE_HEIGHT).rev() {
         eprint!("\rScanlines remaining: {} ", j);
-        io::stdout().flush().expect("Flusing stdout");
+        io::stdout().flush().expect("flusing stdout");
         for i in 0..IMAGE_WIDTH {
             let r = i as f64 / (IMAGE_WIDTH - 1) as f64;
             let g = j as f64 / (IMAGE_HEIGHT - 1) as f64;
             let b = 0.25;
-
-            let ir = (255.999 * r) as i32;
-            let ig = (255.999 * g) as i32;
-            let ib = (255.999 * b) as i32;
-
-            println!("{} {} {}", ir, ig, ib);
+            color::write_color(&mut io::stdout(), &Vec3::new(r, g, b));
         }
     }
 
