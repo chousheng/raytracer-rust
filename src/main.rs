@@ -29,10 +29,10 @@ fn main() {
 
     // World
     let mut world = HittableList::new();
-    let sphere1 = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5);
-    let sphere2 = Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0);
-    world.add(&sphere1);
-    world.add(&sphere2);
+    let sphere1 = Box::new(Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5));
+    let sphere2 = Box::new(Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0));
+    world.add(sphere1);
+    world.add(sphere2);
 
     // Camera
     let viewport_height = 2.0;
