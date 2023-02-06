@@ -1,10 +1,24 @@
 use std::io::Write;
 
+use crate::rtweekend;
 use crate::vec3::Color;
 
-pub fn write_color<T: Write>(write: &mut T, pixel_color: Color) {
-    let r = (255.999 * pixel_color.x()) as i32;
-    let g = (255.999 * pixel_color.y()) as i32;
-    let b = (255.999 * pixel_color.z()) as i32;
-    writeln!(write, "{} {} {}", r, g, b).expect("writing color");
+pub fn write_color(write: &mut impl Write, pixel_color: Color, samples_per_pixel: i32) {
+    let mut r = pixel_color.x();
+    let mut g = pixel_color.y();
+    let mut b = pixel_color.z();
+
+    let scale = 1.0 / samples_per_pixel as f64;
+    r *= scale;
+    g *= scale;
+    b *= scale;
+
+    writeln!(
+        write,
+        "{} {} {}",
+        (256.0 * rtweekend::clamp(r, 0.0, 0.999)) as i32,
+        (256.0 * rtweekend::clamp(g, 0.0, 0.999)) as i32,
+        (256.0 * rtweekend::clamp(b, 0.0, 0.999)) as i32,
+    )
+    .expect("writing color");
 }
