@@ -6,10 +6,9 @@ use raytracer::hittable::HitRecord;
 use raytracer::hittable::Hittable;
 use raytracer::hittable_list::HittableList;
 use raytracer::ray::Ray;
-use raytracer::rtweekend::random_double;
+use raytracer::rtweekend;
 use raytracer::sphere::Sphere;
-use raytracer::vec3::random_in_unit_sphere;
-use raytracer::vec3::unit_vector;
+use raytracer::vec3;
 use raytracer::vec3::Color;
 use raytracer::vec3::Vec3;
 
@@ -21,11 +20,11 @@ fn ray_color(r: &Ray, world: &dyn Hittable, depth: i32) -> Color {
     }
 
     if world.hit(r, 0.001, f64::INFINITY, &mut rec) {
-        let target = rec.p + rec.normal + random_in_unit_sphere();
+        let target = rec.p + rec.normal + vec3::random_in_unit_sphere();
         return 0.5 * ray_color(&Ray::new(rec.p, target - rec.p), world, depth - 1);
     }
 
-    let unit_direction = unit_vector(r.direction());
+    let unit_direction = vec3::unit_vector(r.direction());
     let t = 0.5 * (unit_direction.y() + 1.0);
     (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0)
 }
@@ -59,8 +58,8 @@ fn main() {
         for i in 0..IMAGE_WIDTH {
             let mut pixel_color = Color::default();
             for _ in 0..SAMPLES_PER_PIXEL {
-                let u = (i as f64 + random_double()) / (IMAGE_WIDTH - 1) as f64;
-                let v = (j as f64 + random_double()) / (IMAGE_HEIGHT - 1) as f64;
+                let u = (i as f64 + rtweekend::random_double()) / (IMAGE_WIDTH - 1) as f64;
+                let v = (j as f64 + rtweekend::random_double()) / (IMAGE_HEIGHT - 1) as f64;
                 let r = cam.get_ray(u, v);
                 pixel_color += ray_color(&r, &world, MAX_DEPTH);
             }
