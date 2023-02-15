@@ -1,5 +1,6 @@
 use crate::ray::Ray;
 use crate::rtweekend;
+use crate::vec3;
 use crate::vec3::Point3;
 use crate::vec3::Vec3;
 
@@ -12,6 +13,9 @@ pub struct Camera {
 
 impl Camera {
     pub fn new(
+        lookfrom: Point3,
+        lookat: Point3,
+        vup: Vec3,
         vfov: f64, // Vertical field-of-view in degrees
         aspect_ratio: f64,
     ) -> Camera {
@@ -20,13 +24,14 @@ impl Camera {
         let viewport_height = 2.0 * h;
         let viewport_width = aspect_ratio * viewport_height;
 
-        let focal_length = 1.0;
+        let w = vec3::unit_vector(lookfrom - lookat);
+        let u = vec3::unit_vector(vec3::cross(vup, w));
+        let v = vec3::cross(w, u);
 
-        let origin = Point3::default();
-        let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
-        let vertical = Vec3::new(0.0, viewport_height, 0.0);
-        let lower_left_corner =
-            origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
+        let origin = lookfrom;
+        let horizontal = viewport_width * u;
+        let vertical = viewport_height * v;
+        let lower_left_corner = origin - horizontal / 2.0 - vertical / 2.0 - w;
 
         Camera {
             origin,
@@ -36,16 +41,22 @@ impl Camera {
         }
     }
 
-    pub fn get_ray(&self, u: f64, v: f64) -> Ray {
+    pub fn get_ray(&self, s: f64, t: f64) -> Ray {
         Ray::new(
             self.origin,
-            self.lower_left_corner + u * self.horizontal + v * self.vertical - self.origin,
+            self.lower_left_corner + s * self.horizontal + t * self.vertical - self.origin,
         )
     }
 }
 
 impl Default for Camera {
     fn default() -> Self {
-        Self::new(90.0, 16.0 / 9.0)
+        Self::new(
+            Point3::new(0.0, 0.0, 0.0),
+            Point3::new(0.0, 0.0, -1.0),
+            Vec3::new(0.0, 1.0, 0.0),
+            90.0,
+            16.0 / 9.0,
+        )
     }
 }
