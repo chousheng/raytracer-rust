@@ -37,6 +37,14 @@ impl Vec3 {
         self.e[0].abs() < EPS && self.e[1].abs() < EPS && self.e[2].abs() < EPS
     }
 
+    pub fn random() -> Vec3 {
+        Vec3::new(
+            rtweekend::random_double(),
+            rtweekend::random_double(),
+            rtweekend::random_double(),
+        )
+    }
+
     pub fn random_range(min: f64, max: f64) -> Vec3 {
         Vec3::new(
             rtweekend::random_double_range(min, max),
