@@ -1,3 +1,6 @@
+use std::rc::Rc;
+
+use crate::material::Material;
 use crate::ray::Ray;
 use crate::vec3;
 use crate::vec3::Point3;
@@ -7,6 +10,7 @@ use crate::vec3::Vec3;
 pub struct HitRecord {
     pub p: Point3,
     pub normal: Vec3,
+    pub mat_ptr: Option<Rc<dyn Material>>, // Note: Use Option<> to make mat_ptr "nullable" and satisfy Default trait
     pub t: f64,
     pub front_face: bool,
 }

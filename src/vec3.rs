@@ -32,6 +32,11 @@ impl Vec3 {
         self.e[0] * self.e[0] + self.e[1] * self.e[1] + self.e[2] * self.e[2]
     }
 
+    pub fn near_zero(&self) -> bool {
+        const EPS: f64 = 1.0e-8;
+        self.e[0].abs() < EPS && self.e[1].abs() < EPS && self.e[2].abs() < EPS
+    }
+
     pub fn random_range(min: f64, max: f64) -> Vec3 {
         Vec3::new(
             rtweekend::random_double_range(min, max),
@@ -46,6 +51,14 @@ impl Neg for Vec3 {
 
     fn neg(self) -> Self::Output {
         Vec3::new(-self.x(), -self.y(), -self.z())
+    }
+}
+
+impl Mul for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: Vec3) -> Self::Output {
+        Vec3::new(self.x() * rhs.x(), self.y() * rhs.y(), self.z() * rhs.z())
     }
 }
 
@@ -127,4 +140,8 @@ pub fn random_in_hemisphere(normal: Vec3) -> Vec3 {
     } else {
         -in_unit_sphere
     }
+}
+
+pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
+    v - 2.0 * dot(v, n) * n
 }
