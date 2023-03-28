@@ -1,7 +1,7 @@
 # raytracer-rust
 
-An implementation of [Peter Shirley](https://www.petershirley.com)'s awesome 
-[Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html) (v3.2.3) in Rust.
+A ray tracer in Rust based on [Peter Shirley](https://www.petershirley.com)'s awesome 
+[Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html) (v3.2.3).
 
 <img src="images/rtiow/image21.png" width="600">
 
